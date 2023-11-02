@@ -1,0 +1,13 @@
+---
+- hosts: web
+  roles:
+    - role: hammad.shanzeh_web
+
+- hosts: android
+  roles:
+    - role: ibrahim.eesha_android
+
+- hosts: api
+  roles:
+    - role: saim.sohaib_api
+

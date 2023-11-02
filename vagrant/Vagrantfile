@@ -1,0 +1,30 @@
+# Vagrantfile
+
+Vagrant.configure("2") do |config|
+
+  # Common VM settings
+  config.vm.box = "ubuntu/bionic64"
+
+  # Define your VMs with specific roles
+  vm_definitions = [
+    { name: "shanzeh_web", role: "web", ip: "192.168.34.11" },
+    { name: "eesha_android", role: "android", ip: "192.168.34.12" },
+    { name: "sohaib_api", role: "api", ip: "192.168.34.13" }
+  ]
+
+  vm_definitions.each do |vm_def|
+    config.vm.define vm_def[:name] do |vm|
+      vm.hostname = "spectre-#{vm_def[:role]}-server"
+      vm.network "private_network", type: "static", ip: vm_def[:ip]
+      vm.provision "ansible" do |ansible|
+        ansible.play = "ansible/main.yml"
+        ansible.groups = {
+          "web" => [vm.name] if vm_def[:role] == "web",
+          "android" => [vm.name] if vm_def[:role] == "android",
+          "api" => [vm.name] if vm_def[:role] == "api"
+        }
+      end
+    end
+  end
+end
+
