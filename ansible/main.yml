@@ -1,13 +1,13 @@
 ---
 - hosts: web
   roles:
-    - role: hammad.shanzeh_web
+    - role: shanzeh.shanzeh_web
 
 - hosts: android
   roles:
-    - role: ibrahim.eesha_android
+    - role: eesha.eesha_android
 
 - hosts: api
   roles:
-    - role: saim.sohaib_api
+    - role: sohaib.sohaib_api
 

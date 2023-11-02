@@ -1,5 +1,4 @@
 ---
-# Specify Ansible Galaxy roles and collections
 roles:
   - name: shanzeh.spectre_web
     src: shanzeh.spectre_web
