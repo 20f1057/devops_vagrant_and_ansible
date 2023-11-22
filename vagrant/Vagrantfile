@@ -1,30 +1,37 @@
-# Vagrantfile
-
 Vagrant.configure("2") do |config|
-
-  # Common VM settings
+  # General VM configuration
   config.vm.box = "ubuntu/bionic64"
 
-  # Define your VMs with specific roles
-  vm_definitions = [
-    { name: "shanzeh_web", role: "web", ip: "192.168.34.11" },
-    { name: "eesha_android", role: "android", ip: "192.168.34.12" },
-    { name: "sohaib_api", role: "api", ip: "192.168.34.13" }
-  ]
+  # Configuration for Web VM
+  config.vm.define "web_vm" do |web|
+    web.vm.hostname = "web-vm"
+    web.vm.network "private_network", ip: "192.168.56.101"
+    web.vm.network "forwarded_port", guest: 22, host: 2200, id: "ssh"
+    web.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    web.vm.provision "ansible" do |ansible|
+      ansible.playbook = "../ansible/application1_playbook.yml"
+    end
+  end
 
-  vm_definitions.each do |vm_def|
-    config.vm.define vm_def[:name] do |vm|
-      vm.hostname = "spectre-#{vm_def[:role]}-server"
-      vm.network "private_network", type: "static", ip: vm_def[:ip]
-      vm.provision "ansible" do |ansible|
-        ansible.play = "ansible/main.yml"
-        ansible.groups = {
-          "web" => [vm.name] if vm_def[:role] == "web",
-          "android" => [vm.name] if vm_def[:role] == "android",
-          "api" => [vm.name] if vm_def[:role] == "api"
-        }
-      end
+  # Configuration for API VM
+  config.vm.define "api_vm" do |api|
+    api.vm.hostname = "api-vm"
+    api.vm.network "private_network", ip: "192.168.56.102"
+    api.vm.network "forwarded_port", guest: 22, host: 2201, id: "ssh"
+    api.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    api.vm.provision "ansible" do |ansible|
+      ansible.playbook = "../ansible/application2_playbook.yml"
+    end
+  end
+
+  # Configuration for Android VM
+  config.vm.define "android_vm" do |android|
+    android.vm.hostname = "android-vm"
+    android.vm.network "private_network", ip: "192.168.56.103"
+    android.vm.network "forwarded_port", guest: 22, host: 2202, id: "ssh"
+    android.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    android.vm.provision "ansible" do |ansible|
+      ansible.playbook = "../ansible/application3_playbook.yml"
     end
   end
 end
-
