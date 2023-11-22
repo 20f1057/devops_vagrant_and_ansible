@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     web.vm.network "forwarded_port", guest: 22, host: 2200, id: "ssh"
     web.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     web.vm.provision "ansible" do |ansible|
-      ansible.playbook = "../ansible/application1_playbook.yml"
+      ansible.playbook = "../ansible/shanzeh_web.yml"
     end
   end
 
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     api.vm.network "forwarded_port", guest: 22, host: 2201, id: "ssh"
     api.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     api.vm.provision "ansible" do |ansible|
-      ansible.playbook = "../ansible/application2_playbook.yml"
+      ansible.playbook = "../ansible/sohaib_api.yml"
     end
   end
 
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     android.vm.network "forwarded_port", guest: 22, host: 2202, id: "ssh"
     android.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     android.vm.provision "ansible" do |ansible|
-      ansible.playbook = "../ansible/application3_playbook.yml"
+      ansible.playbook = "../ansible/eesha_android.yml"
     end
   end
 end
